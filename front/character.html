@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character</title>
+</head>
+
+<body>
+    
+    <div id="character">
+    </div>
+    <button onclick="deleteCharacter()">Delete</button>
+
+    <script>
+        let url = window.location.search // chercher l'URL en js
+        let id = new URLSearchParams(url).get('id')
+
+        fetch(`http://localhost:3000/characters/${id}`)
+        .then((response) =>
+            response.json()
+        )
+        .then((data) => {
+            let character = document.querySelector("#character")
+            character.innerHTML = `
+                <small>${data.id}</small>
+                <h1>${data.name}</h1>
+                <h2>${data.type}</h2>
+                <a href='update.html?id=${data.id}'>Modify</a>
+                <a href='index.html'>Back</a>
+            `
+        })
+
+        const deleteCharacter = async () => {
+            await fetch(`http://localhost:3000/characters/${id}`, {
+                method: 'DELETE'
+            })
+            window.location.href='index.html'
+        }
+    </script>
+</body>
+
+</html>

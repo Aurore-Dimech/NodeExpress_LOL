@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update</title>
+</head>
+
+<body>
+
+    <div>
+        <input type="text" name="characterName">
+        <input type="text" name="characterType">
+        <button onclick="updateCharacter()">Update character</button>
+    </div>
+
+    <script>
+        let url = window.location.search
+        let id = new URLSearchParams(url).get('id')
+
+        fetch(`http://localhost:3000/characters/${id}`)
+        .then((response) =>
+            response.json()
+        )
+        .then((data) => {
+            let characterName = document.querySelector('input[name="characterName"]')
+            let characterType = document.querySelector('input[name="characterType"]')
+            characterName.value = data.name
+            characterType.value = data.type
+        })
+
+        const updateCharacter = async () => {
+            let characterName = document.querySelector('input[name="characterName"]').value
+            let characterType = document.querySelector('input[name="characterType"]').value
+
+            let response = await fetch(`http://localhost:3000/characters/${id}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: characterName, type: characterType})
+            })
+            window.location.href = 'index.html'
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node & express ; LOL</title>
+</head>
+
+<body>
+    <div>
+        <input type="text" name="newCharacterName" placeholder="Name">
+        <input type="text" name="newCharacterType" placeholder="Type">
+        <button onclick="sendCharacter()">Add Character</button>
+    </div>
+
+    <h1>All Characters</h1>
+    <button onclick="importCharacters()">Add All</button>
+    <button onclick="deleteAllCharacters()">Delete All</button>
+    <div id="characters"></div>
+
+    <script>
+        fetch('http://localhost:3000/characters')
+            .then((response) => response.json())
+            .then((data) => {
+                let characters = document.querySelector("#characters")
+                data.forEach(character => {
+                    characters.innerHTML += `
+                        <a href='character.html?id=${character.id}'>
+                            <div>
+                                <h2>Name: ${character.name}</h2>
+                                <p>Type: ${character.type}</p>
+                            </div>
+                        </a>
+                    `
+                });
+            })
+
+            const sendCharacter= async () => {
+                let characterName = document.querySelector('input[name="newCharacterName"]').value
+                let characterType = document.querySelector('input[name="newCharacterType"]').value
+
+                await fetch('http://localhost:3000/characters', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({name: characterName, type: characterType})
+                })
+                window.location.href = 'index.html'
+            }
+
+            const importCharacters = async () => {
+                await fetch('http://localhost:3000/characters/import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(() => {
+                    window.location.href = 'index.html'
+                })
+            }
+
+            const deleteAllCharacters = async () => {
+                await fetch('http://localhost:3000/characters', {
+                    method: 'DELETE'
+                })
+                window.location.href = 'index.html'
+            }
+    </script>
+</body>
+
+</html>
