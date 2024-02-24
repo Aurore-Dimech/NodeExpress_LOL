@@ -18,3 +18,10 @@ model Character{ //nom modèle = toujours au singulier et avec une majuscule
   name        String       @unique
   type        String
 }
+
+model User{
+  id          Int          @id @default(autoincrement())
+  pseudo      String 
+  email       String       @unique
+  password    String
+}

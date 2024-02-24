@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+</head>
+
+<body>
+    <a href='index.html' id="back">Back</a>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" name="email">
+        <label for="pseudo">Pseudo</label>
+        <input type="text" name="pseudo">
+        <label for="password">Password</label>
+        <input type="password" name="password">
+        <button onclick="signUp()">Sign Up</button>
+    </div>
+
+    <script>
+        const signUp = async () => {
+            let email = document.querySelector('input[name="email"]').value
+            let pseudo = document.querySelector('input[name="pseudo"]').value
+            let password = document.querySelector('input[name="password"]').value
+
+            await fetch('http://localhost:3000/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    pseudo,
+                    password
+                })
+            })
+
+            .then((response) => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    localStorage.setItem('token', data);
+                    window.location.href="index.html"
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

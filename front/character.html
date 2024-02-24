@@ -12,11 +12,11 @@
     
     <div id="character">
     </div>
-    <button onclick="deleteCharacter()">Delete</button>
 
     <script>
-        let url = window.location.search // chercher l'URL en js
+        let url = window.location.search
         let id = new URLSearchParams(url).get('id')
+        let token = localStorage.getItem('token')
 
         fetch(`http://localhost:3000/characters/${id}`)
         .then((response) =>
@@ -28,9 +28,17 @@
                 <small>${data.id}</small>
                 <h1>${data.name}</h1>
                 <h2>${data.type}</h2>
-                <a href='update.html?id=${data.id}'>Modify</a>
-                <a href='index.html'>Back</a>
+                <a href='index.html' id="back">Back</a>
             `
+            if(token){
+                let back = document.querySelector("#back")
+                let actions = document.createElement('div')
+                actions.innerHTML=`
+                    <a href='update.html?id=${data.id}'>Modify</a>
+                    <button onclick="deleteCharacter()">Delete</button>
+                `
+                back.before(actions)
+            }
         })
 
         const deleteCharacter = async () => {

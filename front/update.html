@@ -20,6 +20,12 @@
         let url = window.location.search
         let id = new URLSearchParams(url).get('id')
 
+        let token = localStorage.getItem('token')
+
+        if(!token){
+            window.location.href = 'login.html'
+        }
+
         fetch(`http://localhost:3000/characters/${id}`)
         .then((response) =>
             response.json()

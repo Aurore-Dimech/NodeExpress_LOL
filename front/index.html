@@ -9,6 +9,9 @@
 </head>
 
 <body>
+    <div id="actions">
+    </div>
+
     <div>
         <input type="text" name="newCharacterName" placeholder="Name">
         <input type="text" name="newCharacterType" placeholder="Type">
@@ -21,6 +24,23 @@
     <div id="characters"></div>
 
     <script>
+        let token = localStorage.getItem('token')
+        let actions = document.querySelector('#actions')
+        let actionButtons = document.createElement('div')
+
+        if(!token){
+            actionButtons.innerHTML = `
+                <a href="signup.html">Sign Up</a>
+                <a href="login.html">Log In</a>
+            `
+        } else {
+            actionButtons.innerHTML = `
+                <button onclick="disconnect()">Disconnect</button>
+            `
+        }
+
+        actions.appendChild(actionButtons)
+
         fetch('http://localhost:3000/characters')
             .then((response) => response.json())
             .then((data) => {
@@ -38,6 +58,11 @@
             })
 
             const sendCharacter= async () => {
+
+                if(!token){
+                    return console.log('Action reserved to connected users')
+                }
+
                 let characterName = document.querySelector('input[name="newCharacterName"]').value
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
 
@@ -52,6 +77,10 @@
             }
 
             const importCharacters = async () => {
+                if(!token){
+                    return console.log('Action reserved to connected users')
+                }
+
                 await fetch('http://localhost:3000/characters/import', {
                     method: 'POST',
                     headers: {
@@ -64,9 +93,18 @@
             }
 
             const deleteAllCharacters = async () => {
+                if(!token){
+                    return console.log('Action reserved to connected users')
+                }
+
                 await fetch('http://localhost:3000/characters', {
                     method: 'DELETE'
                 })
+                window.location.href = 'index.html'
+            }
+
+            const disconnect = () => {
+                localStorage.removeItem('token')
                 window.location.href = 'index.html'
             }
     </script>
