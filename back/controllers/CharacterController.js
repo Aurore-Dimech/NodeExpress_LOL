@@ -39,7 +39,9 @@ const createCharacter = async (req, res) => {
     })
 
     if (existingCharacter) {
-        return res.status(400).json({ error: 'Character name already exists' })
+        return res.status(400).json({ error: 'This character already exists' })
+    } else if (character.name === '' || character.type === ''){
+        return res.status(400).json({ error: 'Name and/or type cannot be empty' })
     } else {
         prisma.character.create({
             data: {
@@ -72,6 +74,8 @@ const updateCharacter = async (req, res) => {
 
     if (existingCharacter) {
         return res.status(400).json({ error: 'This character already exists' })
+    } else if (character.name === '' || character.type === ''){
+        return res.status(400).json({ error: 'Name and/or type cannot be empty' })
     } else {
         prisma.character.update({
             where : {

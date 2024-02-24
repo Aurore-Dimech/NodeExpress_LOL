@@ -66,8 +66,27 @@
                     return console.log('Action reserved to connected users')
                 }
 
+
                 let characterName = document.querySelector('input[name="newCharacterName"]').value
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
+
+                if (characterName === '' && characterType === ''){
+                    duplicateError.textContent = 'Name and Type cannot be empty';
+                    duplicateError.style.display = 'contents'
+                    return
+                }
+
+                if (characterName === ''){
+                    duplicateError.textContent = 'Name cannot be empty';
+                    duplicateError.style.display = 'contents'
+                    return
+                }
+
+                if (characterType === ''){
+                    duplicateError.textContent = 'Type cannot be empty';
+                    duplicateError.style.display = 'contents'
+                    return
+                }
 
                 await fetch('http://localhost:3000/champions', {
                     method: 'POST',

@@ -50,6 +50,24 @@
             let characterName = document.querySelector('input[name="characterName"]').value
             let characterType = document.querySelector('input[name="characterType"]').value
 
+            if (characterName === '' && characterType === ''){
+                duplicateError.textContent = 'Name and Type cannot be empty';
+                duplicateError.style.display = 'contents'
+                return
+            }
+
+            if (characterName === ''){
+                duplicateError.textContent = 'Name cannot be empty';
+                duplicateError.style.display = 'contents'
+                return
+            }
+
+            if (characterType === ''){
+                duplicateError.textContent = 'Type cannot be empty';
+                duplicateError.style.display = 'contents'
+                return
+            }
+
             fetch(`http://localhost:3000/champions/${id}`, {
                 method: 'PATCH',
                 headers: {
