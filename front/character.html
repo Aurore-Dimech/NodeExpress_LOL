@@ -18,7 +18,7 @@
         let id = new URLSearchParams(url).get('id')
         let token = localStorage.getItem('token')
 
-        fetch(`http://localhost:3000/characters/${id}`)
+        fetch(`http://localhost:3000/champions/${id}`)
         .then((response) =>
             response.json()
         )
@@ -42,7 +42,7 @@
         })
 
         const deleteCharacter = async () => {
-            await fetch(`http://localhost:3000/characters/${id}`, {
+            await fetch(`http://localhost:3000/champions/${id}`, {
                 method: 'DELETE'
             })
             window.location.href='index.html'

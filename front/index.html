@@ -44,7 +44,7 @@
 
         actions.appendChild(actionButtons)
 
-        fetch('http://localhost:3000/characters')
+        fetch('http://localhost:3000/champions')
             .then((response) => response.json())
             .then((data) => {
                 let characters = document.querySelector("#characters")
@@ -69,7 +69,7 @@
                 let characterName = document.querySelector('input[name="newCharacterName"]').value
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
 
-                await fetch('http://localhost:3000/characters', {
+                await fetch('http://localhost:3000/champions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -92,7 +92,7 @@
                     return console.log('Action reserved to connected users')
                 }
 
-                await fetch('http://localhost:3000/characters/import', {
+                await fetch('http://localhost:3000/champions/import', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -108,7 +108,7 @@
                     return console.log('Action reserved to connected users')
                 }
 
-                await fetch('http://localhost:3000/characters', {
+                await fetch('http://localhost:3000/champions', {
                     method: 'DELETE'
                 })
                 window.location.href = 'index.html'

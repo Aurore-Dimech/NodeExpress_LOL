@@ -35,7 +35,7 @@
         `
         document.body.appendChild(back)
 
-        fetch(`http://localhost:3000/characters/${id}`)
+        fetch(`http://localhost:3000/champions/${id}`)
         .then((response) =>
             response.json()
         )
@@ -50,7 +50,7 @@
             let characterName = document.querySelector('input[name="characterName"]').value
             let characterType = document.querySelector('input[name="characterType"]').value
 
-            fetch(`http://localhost:3000/characters/${id}`, {
+            fetch(`http://localhost:3000/champions/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
