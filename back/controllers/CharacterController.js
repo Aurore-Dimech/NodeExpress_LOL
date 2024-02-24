@@ -29,42 +29,67 @@ const getCharacter = (req, res) => {
     })
 }
 
-const createCharacter = (req, res) => {
+const createCharacter = async (req, res) => {
     let character = req.body
 
-    prisma.character.create({
-        data: {
-            name: character.name,
-            type: character.type
+    const existingCharacter = await prisma.character.findUnique({
+        where: {
+            name: character.name
         }
     })
-    .then((character) => {
-        res.json(character)
-    })
-    .catch((error) => { 
-        res.json(error)
-    }) 
+
+    if (existingCharacter) {
+        return res.status(400).json({ error: 'Character name already exists' })
+    } else {
+        prisma.character.create({
+            data: {
+                name: character.name,
+                type: character.type
+            }
+        })
+        .then((character) => {
+            res.json(character)
+        })
+        .catch((error) => { 
+            res.json(error)
+        }) 
+    }
+
 }
 
-const updateCharacter = (req, res) => {
+const updateCharacter = async (req, res) => {
     let id = Number(req.params.id)
     let character = req.body
 
-    prisma.character.update({
-        where : {
-            id: id
-        },
-        data: {
+    const existingCharacter = await prisma.character.findFirst({
+        where: {
             name: character.name,
-            type: character.type
+            id: {
+                not: id
+            }
         }
     })
-    .then((character) => {
-        res.json(character)
-    })
-    .catch((error) => {
-        res.json(error)
-    })
+
+    if (existingCharacter) {
+        return res.status(400).json({ error: 'Character name already exists' })
+    } else {
+        prisma.character.update({
+            where : {
+                id: id
+            },
+            data: {
+                name: character.name,
+                type: character.type
+            }
+        })
+        .then((character) => {
+            res.json(character)
+        })
+        .catch((error) => {
+            res.json(error)
+        })
+    }
+
 }
 
 const deleteCharacter = (req, res) => {

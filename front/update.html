@@ -26,6 +26,12 @@
             window.location.href = 'login.html'
         }
 
+        let back = document.createElement('div')
+        back.innerHTML= `
+            <a href='character.html?id=${id}''>Back</a>
+        `
+        document.body.appendChild(back)
+
         fetch(`http://localhost:3000/characters/${id}`)
         .then((response) =>
             response.json()
@@ -41,14 +47,23 @@
             let characterName = document.querySelector('input[name="characterName"]').value
             let characterType = document.querySelector('input[name="characterType"]').value
 
-            let response = await fetch(`http://localhost:3000/characters/${id}`, {
-                method: "PATCH",
+            fetch(`http://localhost:3000/characters/${id}`, {
+                method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({name: characterName, type: characterType})
             })
-            window.location.href = 'index.html'
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    const errorParagraph = document.createElement('p');
+                    errorParagraph.textContent = data.error;
+                    document.body.appendChild(errorParagraph);
+                } else {
+                    window.location.href = 'index.html'
+                }
+            });
         }
     </script>
 </body>

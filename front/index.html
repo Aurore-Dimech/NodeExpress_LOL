@@ -12,7 +12,7 @@
     <div id="actions">
     </div>
 
-    <div>
+    <div id="newCharacter">
         <input type="text" name="newCharacterName" placeholder="Name">
         <input type="text" name="newCharacterType" placeholder="Type">
         <button onclick="sendCharacter()">Add Character</button>
@@ -65,6 +65,7 @@
 
                 let characterName = document.querySelector('input[name="newCharacterName"]').value
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
+                let newCharacterSection = document.querySelector('#newCharacter')
 
                 await fetch('http://localhost:3000/characters', {
                     method: 'POST',
@@ -73,7 +74,16 @@
                     },
                     body: JSON.stringify({name: characterName, type: characterType})
                 })
-                window.location.href = 'index.html'
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        const errorParagraph = document.createElement('p');
+                        errorParagraph.textContent = data.error;
+                        newCharacterSection.appendChild(errorParagraph);
+                    } else {
+                        window.location.href = 'index.html'
+                    }
+                })
             }
 
             const importCharacters = async () => {
