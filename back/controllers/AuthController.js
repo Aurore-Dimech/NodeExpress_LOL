@@ -14,13 +14,12 @@ const signUp = async (req, res) => {
         }
     })
 
-    if (existingUser) {
-        return res.status(400).json({ error: 'This email is already registered' })
-    }
-
     if(email === '' || pseudo === '' || password ===''){
         res.json({error: 'All fields must be completed'})
+    } else if (existingUser) {
+        return res.status(400).json({ error: 'This email is already registered' })
     } else {
+
         prisma.user.create({
             data: {
                 email,
@@ -53,13 +52,13 @@ const logIn = async (req, res) => {
     if (!user){
         return res.json({error: 'User not found'})
     }
-
+    
     const checkPassword = await bcrypt.compare(password, user.password)
 
     if(!checkPassword) {
         return res.json({error: 'Password not valid'})
     }
-
+    
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
         expiresIn: '2h'
     })

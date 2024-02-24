@@ -15,7 +15,7 @@
         <input type="text" name="characterType">
         <button onclick="updateCharacter()">Update character</button>
     </div>
-    <p id="duplicateError"></p>
+    <p id="error"></p>
 
     <script>
         let token = localStorage.getItem('token')
@@ -26,8 +26,8 @@
 
         let url = window.location.search
         let id = new URLSearchParams(url).get('id')
-        let duplicateError = document.querySelector('#duplicateError')
-        duplicateError.style.display = 'none'
+        let error = document.querySelector('#error')
+        error.style.display = 'none'
 
         let back = document.createElement('div')
         back.innerHTML= `
@@ -51,20 +51,20 @@
             let characterType = document.querySelector('input[name="characterType"]').value
 
             if (characterName === '' && characterType === ''){
-                duplicateError.textContent = 'Name and Type cannot be empty';
-                duplicateError.style.display = 'contents'
+                error.textContent = 'Name and Type cannot be empty';
+                error.style.display = 'contents'
                 return
             }
 
             if (characterName === ''){
-                duplicateError.textContent = 'Name cannot be empty';
-                duplicateError.style.display = 'contents'
+                error.textContent = 'Name cannot be empty';
+                error.style.display = 'contents'
                 return
             }
 
             if (characterType === ''){
-                duplicateError.textContent = 'Type cannot be empty';
-                duplicateError.style.display = 'contents'
+                error.textContent = 'Type cannot be empty';
+                error.style.display = 'contents'
                 return
             }
 
@@ -78,8 +78,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    duplicateError.textContent = data.error;
-                    duplicateError.style.display = 'contents'
+                    error.textContent = data.error;
+                    error.style.display = 'contents'
                 } else {
                     window.location.href = 'index.html'
                 }

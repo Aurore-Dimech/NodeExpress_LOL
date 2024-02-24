@@ -20,6 +20,7 @@
         
         <button onclick="logIn()">Log In</button>
     </div>
+    <p id="error"></p>
 
     <script>
         const logIn = async () => {
@@ -39,7 +40,8 @@
             .then((response) => response.json())
             .then(data => {
                 if (data.error) {
-                    console.error('Error:', data.error);
+                    error.textContent = data.error;
+                    error.style.display = 'contents'
                 } else {
                     localStorage.setItem('token', data);
                     window.location.href="index.html"

@@ -17,19 +17,24 @@
         <input type="text" name="newCharacterType" placeholder="Type">
         <button onclick="sendCharacter()">Add Character</button>
     </div>
-    <p id="duplicateError"></p>
+    <p id="singleError"></p>
 
     <h1>All Characters</h1>
-    <button onclick="importCharacters()">Add All</button>
-    <button onclick="deleteAllCharacters()">Delete All</button>
+    <div>
+        <button onclick="importCharacters()">Add All</button>
+        <button onclick="deleteAllCharacters()">Delete All</button>
+    </div>
+    <p id="allError"></p>
     <div id="characters"></div>
 
     <script>
         let token = localStorage.getItem('token')
         let actions = document.querySelector('#actions')
         let actionButtons = document.createElement('div')
-        let duplicateError = document.querySelector('#duplicateError')
-        duplicateError.style.display = 'none'
+        let singleError = document.querySelector('#singleError')
+        singleError.style.display = 'none'
+        let allError = document.querySelector('#allError')
+        allError.style.display = 'none'
 
         if(!token){
             actionButtons.innerHTML = `
@@ -63,7 +68,9 @@
             const sendCharacter= async () => {
 
                 if(!token){
-                    return console.log('Action reserved to connected users')
+                    singleError.textContent = 'Action reserved to connected users';
+                    singleError.style.display = 'contents'
+                    return
                 }
 
 
@@ -71,20 +78,20 @@
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
 
                 if (characterName === '' && characterType === ''){
-                    duplicateError.textContent = 'Name and Type cannot be empty';
-                    duplicateError.style.display = 'contents'
+                    singleError.textContent = 'Name and Type cannot be empty';
+                    singleError.style.display = 'contents'
                     return
                 }
 
                 if (characterName === ''){
-                    duplicateError.textContent = 'Name cannot be empty';
-                    duplicateError.style.display = 'contents'
+                    singleError.textContent = 'Name cannot be empty';
+                    singleError.style.display = 'contents'
                     return
                 }
 
                 if (characterType === ''){
-                    duplicateError.textContent = 'Type cannot be empty';
-                    duplicateError.style.display = 'contents'
+                    singleError.textContent = 'Type cannot be empty';
+                    singleError.style.display = 'contents'
                     return
                 }
 
@@ -98,8 +105,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
-                        duplicateError.textContent = data.error;
-                        duplicateError.style.display = 'contents'
+                        singleError.textContent = data.error;
+                        singleError.style.display = 'contents'
                     } else {
                         window.location.href = 'index.html'
                     }
@@ -108,7 +115,9 @@
 
             const importCharacters = async () => {
                 if(!token){
-                    return console.log('Action reserved to connected users')
+                    allError.textContent = 'Action reserved to connected users';
+                    allError.style.display = 'contents'
+                    return
                 }
 
                 await fetch('http://localhost:3000/champions/import', {
@@ -124,7 +133,9 @@
 
             const deleteAllCharacters = async () => {
                 if(!token){
-                    return console.log('Action reserved to connected users')
+                    allError.textContent = 'Action reserved to connected users';
+                    allError.style.display = 'contents'
+                    return
                 }
 
                 await fetch('http://localhost:3000/champions', {

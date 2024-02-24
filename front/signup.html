@@ -17,12 +17,22 @@
         <input type="password" name="password">
         <button onclick="signUp()">Sign Up</button>
     </div>
+    <p id="error"></p>
 
     <script>
+        let error = document.querySelector('#error')
+        error.style.display = 'none'
+
         const signUp = async () => {
             let email = document.querySelector('input[name="email"]').value
             let pseudo = document.querySelector('input[name="pseudo"]').value
             let password = document.querySelector('input[name="password"]').value
+
+            if (email === '' || pseudo === '' || password === '' ){
+                error.textContent = 'All fields must be completed';
+                error.style.display = 'contents'
+                return
+            }
 
             await fetch('http://localhost:3000/auth/signup', {
                 method: 'POST',
@@ -39,7 +49,8 @@
             .then((response) => response.json())
             .then(data => {
                 if (data.error) {
-                    console.error('Error:', data.error);
+                    error.textContent = data.error;
+                    error.style.display = 'contents'
                 } else {
                     localStorage.setItem('token', data);
                     window.location.href="index.html"
