@@ -15,16 +15,19 @@
         <input type="text" name="characterType">
         <button onclick="updateCharacter()">Update character</button>
     </div>
+    <p id="duplicateError"></p>
 
     <script>
-        let url = window.location.search
-        let id = new URLSearchParams(url).get('id')
-
         let token = localStorage.getItem('token')
 
         if(!token){
             window.location.href = 'login.html'
         }
+
+        let url = window.location.search
+        let id = new URLSearchParams(url).get('id')
+        let duplicateError = document.querySelector('#duplicateError')
+        duplicateError.style.display = 'none'
 
         let back = document.createElement('div')
         back.innerHTML= `
@@ -57,9 +60,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    const errorParagraph = document.createElement('p');
-                    errorParagraph.textContent = data.error;
-                    document.body.appendChild(errorParagraph);
+                    duplicateError.textContent = data.error;
+                    duplicateError.style.display = 'contents'
                 } else {
                     window.location.href = 'index.html'
                 }

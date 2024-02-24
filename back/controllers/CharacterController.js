@@ -71,7 +71,7 @@ const updateCharacter = async (req, res) => {
     })
 
     if (existingCharacter) {
-        return res.status(400).json({ error: 'Character name already exists' })
+        return res.status(400).json({ error: 'This character already exists' })
     } else {
         prisma.character.update({
             where : {

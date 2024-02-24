@@ -12,11 +12,12 @@
     <div id="actions">
     </div>
 
-    <div id="newCharacter">
+    <div>
         <input type="text" name="newCharacterName" placeholder="Name">
         <input type="text" name="newCharacterType" placeholder="Type">
         <button onclick="sendCharacter()">Add Character</button>
     </div>
+    <p id="duplicateError"></p>
 
     <h1>All Characters</h1>
     <button onclick="importCharacters()">Add All</button>
@@ -27,6 +28,8 @@
         let token = localStorage.getItem('token')
         let actions = document.querySelector('#actions')
         let actionButtons = document.createElement('div')
+        let duplicateError = document.querySelector('#duplicateError')
+        duplicateError.style.display = 'none'
 
         if(!token){
             actionButtons.innerHTML = `
@@ -65,7 +68,6 @@
 
                 let characterName = document.querySelector('input[name="newCharacterName"]').value
                 let characterType = document.querySelector('input[name="newCharacterType"]').value
-                let newCharacterSection = document.querySelector('#newCharacter')
 
                 await fetch('http://localhost:3000/characters', {
                     method: 'POST',
@@ -77,9 +79,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
-                        const errorParagraph = document.createElement('p');
-                        errorParagraph.textContent = data.error;
-                        newCharacterSection.appendChild(errorParagraph);
+                        duplicateError.textContent = data.error;
+                        duplicateError.style.display = 'contents'
                     } else {
                         window.location.href = 'index.html'
                     }
